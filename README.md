@@ -1,4 +1,4 @@
-# Nitip
+# Nitip - Cache engine
 
 Nitip adalah Redis clone dan alternatif ringan untuk Redis yang dibangun menggunakan C++. Menyediakan penyimpanan data key-value di memory dengan fokus pada performa tinggi, konsumsi resource yang efisien, dan kemudahan integrasi.
 
