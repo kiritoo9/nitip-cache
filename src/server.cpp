@@ -45,11 +45,14 @@ void NitipServer::handleClient(int client_fd)
 
         std::string response;
 
+        std::string cmd = tokens[0];
+        std::transform(cmd.begin(), cmd.end(), cmd.begin(), ::tolower);
+
         if (tokens.empty())
         {
             response = "ERR\r\n";
         }
-        else if (tokens[0] == "auth")
+        else if (cmd == "auth")
         {
             if (tokens.size() < 2)
             {
@@ -78,7 +81,7 @@ void NitipServer::handleClient(int client_fd)
         {
             response = "-ERR not authenticated\r\n";
         }
-        else if (tokens[0] == "set")
+        else if (cmd == "set")
         {
             if (tokens.size() >= 3)
             {
@@ -94,32 +97,32 @@ void NitipServer::handleClient(int client_fd)
                 response = "ERR usage: SET key value\r\n";
             }
         }
-        else if (tokens[0] == "get")
+        else if (cmd == "get")
         {
             std::string fullKey = prefixKey(currentTenant, tokens[1]);
             response = nitip.get(fullKey) + "\r\n";
         }
-        else if (tokens[0] == "del")
+        else if (cmd == "del")
         {
             std::string fullKey = prefixKey(currentTenant, tokens[1]);
             nitip.del(fullKey);
             response = "+OK\r\n";
         }
-        else if (tokens[0] == "expire")
+        else if (cmd == "expire")
         {
             std::string fullKey = prefixKey(currentTenant, tokens[1]);
             nitip.expire(fullKey, std::stoi(tokens[2]));
             response = "+OK\r\n";
         }
-        else if (tokens[0] == "info")
+        else if (cmd == "info")
         {
             response = nitip.info() + "\r\n";
         }
-        else if (tokens[0] == "whoami")
+        else if (cmd == "whoami")
         {
             response = currentTenant + "\r\n";
         }
-        else if (tokens[0] == "who")
+        else if (cmd == "who")
         {
             response = currentTenant + "\r\n";
         }
