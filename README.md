@@ -221,6 +221,47 @@ Nitip Engine (prefix key: tenant:)
   └── Persistence Layer (nitip.db)
 ```
 
+## Docker
+
+### Build & Run
+
+```bash
+docker compose up -d
+```
+
+Image size: ~2.3MB (multi-stage build, scratch base).
+
+### Token Management via Docker
+
+Container berbasis `scratch` — tidak ada shell. Semua CLI commands harus pakai `-w /data` agar CWD sesuai lokasi `nitip.auth`.
+
+```bash
+# Generate token (tanpa expiry)
+docker exec -w /data nitip /nitip gen-token <tenant_id>
+
+# Generate token dengan TTL (detik)
+docker exec -w /data nitip /nitip gen-token <tenant_id> --ttl 86400
+
+# List semua token aktif
+docker exec -w /data nitip /nitip list-tokens
+
+# Revoke token tenant
+docker exec -w /data nitip /nitip revoke-token <tenant_id>
+```
+
+### Data Persistence
+
+`nitip.auth` dan `nitip.db` disimpan di Docker named volume `nitip-data` (mount ke `/data` di dalam container). Data tidak hilang saat container restart.
+
+### Ubah Port
+
+Edit `docker-compose.yml`:
+
+```yaml
+ports:
+  - "6380:6379"   # host:container
+```
+
 ## File Structure
 
 ```

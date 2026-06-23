@@ -1,0 +1,14 @@
+services:
+  nitip:
+    build: .
+    image: nitip-cache:latest
+    container_name: nitip
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - nitip-data:/data
+    command: ["6379"]   # optional: change port here
+
+volumes:
+  nitip-data:
